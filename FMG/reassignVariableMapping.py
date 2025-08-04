@@ -14,7 +14,7 @@ def help():
     
     ./RevisionAdomAndDiff.py ip username password adom vdom_to_assign
 
-    #this script reassigns all variables associated in an adom with a device-vdom-global to device-vdom_to_assign
+    #this script reassigns all variables associated in an adom with a device-vdom-global to device-vdom_to_assign keeping original variable oids
 
     '''
     print(structure)
