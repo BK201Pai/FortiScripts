@@ -7,6 +7,9 @@ foreach line $linelist {
         	Hostname {
 				set hostname [string trim $value]
 }}}
+
+#Get hostname to be used in Certificate CN
+
 set HaCluster [exec "get system ha status\n" "# " 15]
 set MemberList {}
 set linelist [split $HaCluster \n]
@@ -23,6 +26,13 @@ set lastelement [lindex $SerialList end]
 set CleanedLast [string map {"," ""} $lastelement]
 set SerialList [lreplace $SerialList end end $CleanedLast]
 
+#Sanitize and format each SN in the cluster to have its own SAN DNS required by FGFM protocol, each DNS needs \\\n because of FMG limitation, this script allowes any number of SN in certreq
 set Lista [join $SerialList ""]
+
+# \\\n is required because of FMG 70 character limitation https://community.fortinet.com/fortimanager-27/technical-tip-overcoming-fortimanager-70-character-limit-for-tcl-scripts-211132
+
+#Fields https://community.fortinet.com/fortigate-3/technical-tip-fortigate-certificate-enrollment-using-scep-with-a-specific-source-ip-176971
 set scep [exec "execute vpn certificate local generate\\\n rsa TestSCEP 4096\\\n $hostname TT XX XX XX TestSCEP\\\n \"xx@test.com\"\\\n $Lista 10.5.215.14/app/cert/scep/\\\n lf3Sjfqt\n" "# " 15]
 puts $scep
+
+#create SCEP request and print it for logging, each filed is exactly as needed no field can be skipped, fill with your own info
