@@ -1,0 +1,28 @@
+#!
+set sysstat [exec "get system status\n" "# " 15 ]
+set linelist [split $sysstat \n]
+foreach line $linelist {
+	if {![regexp {([^:]+):(.*)} $line dummy key value]} continue
+		switch -regexp -- $key {
+        	Hostname {
+				set hostname [string trim $value]
+}}}
+set HaCluster [exec "get system ha status\n" "# " 15]
+set MemberList {}
+set linelist [split $HaCluster \n]
+foreach line $linelist {
+	if {![regexp {(.*HA cluster index.*)} $line found]} continue
+		lappend MemberList $found
+}
+foreach member $MemberList {
+	set Serials [split $member ","]
+    set CleanSerial [string map {" " ""} [lindex $Serials 1]]
+	lappend SerialList "DNS:${CleanSerial},\\\n"
+}
+set lastelement [lindex $SerialList end]
+set CleanedLast [string map {"," ""} $lastelement]
+set SerialList [lreplace $SerialList end end $CleanedLast]
+
+set Lista [join $SerialList ""]
+set scep [exec "execute vpn certificate local generate\\\n rsa TestSCEP 4096\\\n $hostname TT XX XX XX TestSCEP\\\n \"xx@test.com\"\\\n $Lista 10.5.215.14/app/cert/scep/\\\n lf3Sjfqt\n" "# " 15]
+puts $scep
