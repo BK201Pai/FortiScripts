@@ -36,10 +36,13 @@ set scep [exec "execute vpn certificate local generate\\\n
  rsa <LocalName> <KEYSIZE>\\\n
  $hostname <Country> <State/Province>\\\n
  <City> <Org> <OU>\\\n
-\"<ADMEMAIL>\"\\\n
+ \"<ADMEMAIL>\"\\\n
  $List <SCEPURL>\\\n
  <SCEPPASS>\\\n
  <SRCIP>" "# " 30]
+#starting space character is needed between parameters, inserting it at the start of new line for better visibility instead of trailing space after \\\n
+ 
 puts $scep
+
 
 #create SCEP request and print it for logging, each field <> is exactly as needed no field can be skipped, fill with your own info, SRCIP can be deleted if not needed
