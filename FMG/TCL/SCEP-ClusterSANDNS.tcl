@@ -32,7 +32,14 @@ set Lista [join $SerialList ""]
 # \\\n is required because of FMG 70 character limitation https://community.fortinet.com/fortimanager-27/technical-tip-overcoming-fortimanager-70-character-limit-for-tcl-scripts-211132
 
 #Fields https://community.fortinet.com/fortigate-3/technical-tip-fortigate-certificate-enrollment-using-scep-with-a-specific-source-ip-176971
-set scep [exec "execute vpn certificate local generate\\\n rsa TestSCEP 4096\\\n $hostname IT XX XX XX TestSCEP\\\n \"test@internal.com\"\\\n $Lista 10.5.215.14/app/cert/scep/\\\n lf3Sjfqt\n" "# " 15]
+set scep [exec "execute vpn certificate local generate\\\n
+ rsa <LocalName> <KEYSIZE>\\\n
+ $hostname <Country> <State/Province>\\\n
+ <City> <Org> <OU>\\\n
+\"<ADMEMAIL>\"\\\n
+ $List <SCEPURL>\\\n
+ <SCEPPASS>\\\n
+ <SRCIP>" "# " 30]
 puts $scep
 
-#create SCEP request and print it for logging, each field is exactly as needed no field can be skipped, fill with your own info
+#create SCEP request and print it for logging, each field <> is exactly as needed no field can be skipped, fill with your own info, SRCIP can be deleted if not needed
