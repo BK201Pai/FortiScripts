@@ -37,7 +37,8 @@ set scep [exec "execute vpn certificate local generate\\\n
  $hostname <Country> <State/Province>\\\n
  <City> <Org> <OU>\\\n
  \"<ADMEMAIL>\"\\\n
- $List <SCEPURL>\\\n
+ $List\\\n
+ <SCEPURL>\\\n
  <SCEPPASS>\\\n
  <SRCIP>" "# " 30]
 #starting space character is needed between parameters, inserting it at the start of new line for better visibility instead of trailing space after \\\n
